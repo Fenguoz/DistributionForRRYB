@@ -63,4 +63,20 @@ class UsersMachineController extends Controller
         $data = $usersMachineService->getMachineOutput($params, $option);
         return self::success($data);
     }
+
+    public function recordLotteryResult(Request $request, UsersMachineService $usersMachineService)
+    {
+        $mac = $request->input('mac');
+        $result = $request->input('result');
+        $type = $request->input('type');
+        $data = $usersMachineService->recordLotteryResult($mac, $result, $type);
+        return self::success($data);
+    }
+
+    public function getLotteryResult(Request $request, UsersMachineService $usersMachineService)
+    {
+        $mac = $request->input('mac') ?? '';
+        $data = $usersMachineService->getLotteryResult($mac);
+        return self::success($data);
+    }
 }

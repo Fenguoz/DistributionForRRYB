@@ -4,10 +4,17 @@ namespace Fenguoz\Distribution\Exceptions;
 
 class UsersMachineException extends \Exception
 {
-    const UNKONW = 72000;
+    const MAC_ERROR = 72300;
+    const RESULT_ERROR = 72301;
+    const TYPE_ERROR = 72302;
+    const NOT_LOTTERY = 72303;
+    const MAC_EXIST = 72304;
 
     static public $__names = array(
-        self::UNKONW => 'UNKNOWN',
+        self::MAC_ERROR => 'MAC_ERROR',
+        self::TYPE_ERROR => 'TYPE_ERROR',
+        self::NOT_LOTTERY => 'NOT_LOTTERY',
+        self::MAC_EXIST => 'MAC_EXIST',
     );
 
     /**

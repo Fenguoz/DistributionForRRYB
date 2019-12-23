@@ -6,6 +6,7 @@ use App\Services\Service;
 use Fenguoz\Distribution\Exceptions\CommonException;
 use Fenguoz\Distribution\Exceptions\MachineException;
 use Fenguoz\Distribution\Exceptions\UsersMachineException;
+use Fenguoz\Distribution\Models\LotteryResultModel;
 use Fenguoz\Distribution\Models\UsersMachineModel;
 use Fenguoz\Distribution\Models\UsersMachineOutputModel;
 use Fenguoz\Distribution\Models\UsersModel;
@@ -47,5 +48,42 @@ class UsersMachineService extends Service
         if (!$user)
             throw new CommonException(CommonException::USER_NOT_EXIST);
         return $user;
+    }
+
+    public function recordLotteryResult(string $mac, int $result, int $type)
+    {
+        if (!$this->verifyMac($mac))
+            throw new UsersMachineException(UsersMachineException::MAC_ERROR);
+        if ($result < 0)
+            throw new UsersMachineException(UsersMachineException::RESULT_ERROR);
+        if (!in_array($type, [1, 2]))
+            throw new UsersMachineException(UsersMachineException::TYPE_ERROR);
+        if (LotteryResultModel::where('mac', $mac)->exists())
+            throw new UsersMachineException(UsersMachineException::MAC_EXIST);
+
+        $result = LotteryResultModel::insert([
+            'mac' => $mac,
+            'result' => $result,
+            'type' => $type,
+        ]);
+        if (!$result)
+            throw new CommonException(CommonException::DATA_ERRPR);
+        return $result;
+    }
+
+    public function verifyMac(string $mac): bool
+    {
+        $pattern = "/^[A-F0-9]{2}(-[A-F0-9]{2}){5}$/";
+        return preg_match($pattern, $mac) ? true : false;
+    }
+
+    public function getLotteryResult(string $mac)
+    {
+        if (!$this->verifyMac($mac))
+            throw new UsersMachineException(UsersMachineException::MAC_ERROR);
+        $data = LotteryResultModel::where('mac', $mac)->first();
+        if (!$data)
+            throw new UsersMachineException(UsersMachineException::NOT_LOTTERY);
+        return  $data;
     }
 }

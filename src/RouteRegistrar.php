@@ -50,5 +50,9 @@ class RouteRegistrar
             $router->get('/get.machine.list', ['uses' => 'UsersMachineController@machineList']);
             $router->get('/get.machine.output', ['uses' => 'UsersMachineController@machineOutput']);
         });
+        $this->router->group(['middleware' => 'token:client'], function ($router) {
+            $router->get('/get.lottery.result', ['uses' => 'UsersMachineController@getLotteryResult']);
+            $router->post('/post.lottery.result', ['uses' => 'UsersMachineController@recordLotteryResult']);
+        });
     }
 }

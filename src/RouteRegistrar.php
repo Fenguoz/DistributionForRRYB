@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenguoz\MachineLease;
+namespace Fenguoz\Distribution;
 
 use Illuminate\Contracts\Routing\Registrar as Router;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenguoz\MachineLease\Services;
+namespace Fenguoz\Distribution\Services;
 
 use App\Services\Service;
 

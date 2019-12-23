@@ -1,11 +1,11 @@
 <?php
 
-namespace Fenguoz\MachineLease\Commands;
+namespace Fenguoz\Distribution\Commands;
 
 use Exception;
-use Fenguoz\MachineLease\Models\MachineQuotesModel;
-use Fenguoz\MachineLease\Models\UsersMachineModel;
-use Fenguoz\MachineLease\Models\UsersMachineOutputModel;
+use Fenguoz\Distribution\Models\MachineQuotesModel;
+use Fenguoz\Distribution\Models\UsersMachineModel;
+use Fenguoz\Distribution\Models\UsersMachineOutputModel;
 use Illuminate\Console\Command;
 
 class MachineOutput extends Command

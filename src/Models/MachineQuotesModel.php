@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenguoz\MachineLease\Models;
+namespace Fenguoz\Distribution\Models;
 
 use App\Models\Model;
 

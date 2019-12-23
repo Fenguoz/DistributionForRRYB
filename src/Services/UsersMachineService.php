@@ -1,14 +1,14 @@
 <?php
 
-namespace Fenguoz\MachineLease\Services;
+namespace Fenguoz\Distribution\Services;
 
 use App\Services\Service;
-use Fenguoz\MachineLease\Exceptions\CommonException;
-use Fenguoz\MachineLease\Exceptions\MachineException;
-use Fenguoz\MachineLease\Exceptions\UsersMachineException;
-use Fenguoz\MachineLease\Models\UsersMachineModel;
-use Fenguoz\MachineLease\Models\UsersMachineOutputModel;
-use Fenguoz\MachineLease\Models\UsersModel;
+use Fenguoz\Distribution\Exceptions\CommonException;
+use Fenguoz\Distribution\Exceptions\MachineException;
+use Fenguoz\Distribution\Exceptions\UsersMachineException;
+use Fenguoz\Distribution\Models\UsersMachineModel;
+use Fenguoz\Distribution\Models\UsersMachineOutputModel;
+use Fenguoz\Distribution\Models\UsersModel;
 
 class UsersMachineService extends Service
 {

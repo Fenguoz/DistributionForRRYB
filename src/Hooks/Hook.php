@@ -1,6 +1,6 @@
 <?php
 
-use Fenguoz\MachineLease\Models\OrderQueueModel;
+use Fenguoz\Distribution\Models\OrderQueueModel;
 
 class PluginMachineleaseHook
 {

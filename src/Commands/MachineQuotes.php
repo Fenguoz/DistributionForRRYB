@@ -1,8 +1,8 @@
 <?php
 
-namespace Fenguoz\MachineLease\Commands;
+namespace Fenguoz\Distribution\Commands;
 
-use Fenguoz\MachineLease\Models\MachineQuotesModel;
+use Fenguoz\Distribution\Models\MachineQuotesModel;
 use Illuminate\Console\Command;
 
 class MachineQuotes extends Command

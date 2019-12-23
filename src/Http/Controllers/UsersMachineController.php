@@ -1,11 +1,11 @@
 <?php
 
-namespace Fenguoz\MachineLease\Http\Controllers;
+namespace Fenguoz\Distribution\Http\Controllers;
 
 use App\Libraries\Send;
-use Fenguoz\MachineLease\Exceptions\CommonException;
-use Fenguoz\MachineLease\Exceptions\MachineException;
-use Fenguoz\MachineLease\Services\UsersMachineService;
+use Fenguoz\Distribution\Exceptions\CommonException;
+use Fenguoz\Distribution\Exceptions\MachineException;
+use Fenguoz\Distribution\Services\UsersMachineService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenguoz\MachineLease\Exceptions;
+namespace Fenguoz\Distribution\Exceptions;
 
 class UsersMachineException extends \Exception
 {

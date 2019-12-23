@@ -1,6 +1,6 @@
 <?php
 
-namespace Fenguoz\MachineLease;
+namespace Fenguoz\Distribution;
 
 use Illuminate\Support\ServiceProvider as BaseProvider;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +54,7 @@ class ServiceProvider extends BaseProvider
         };
 
         $defaultOptions = [
-            'namespace' => '\Fenguoz\MachineLease\Http\Controllers',
+            'namespace' => '\Fenguoz\Distribution\Http\Controllers',
         ];
 
         $options = array_merge($defaultOptions, $options);

@@ -1,12 +1,12 @@
 <?php
 
-namespace Fenguoz\MachineLease\Commands;
+namespace Fenguoz\Distribution\Commands;
 
 use App\Exceptions\Common\CommonException;
 use App\Models\Order\OrderSkuModel;
 use Exception;
-use Fenguoz\MachineLease\Models\OrderQueueModel;
-use Fenguoz\MachineLease\Models\UsersMachineModel;
+use Fenguoz\Distribution\Models\OrderQueueModel;
+use Fenguoz\Distribution\Models\UsersMachineModel;
 use Illuminate\Console\Command;
 
 class MachineCreate extends Command

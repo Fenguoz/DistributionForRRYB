@@ -1,0 +1,25 @@
+{
+    "name": "fenguoz/distribution",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0",
+        "fenguoz/machineLease": "*"
+    },
+    "autoload": {
+        "psr-4":{
+            "Fenguoz\\Distribution\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fenguoz\\Distribution\\Tests\\":"tests/"
+        }
+    },
+    "extra": {
+        "laravel":{
+            "providers": [
+                "Fenguoz\\Distribution\\ServiceProvider"
+            ]
+        }
+    }
+}

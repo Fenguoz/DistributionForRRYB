@@ -73,12 +73,13 @@ class MachineCreate extends Command
                     'order_sub_sn' => $sku->sub_sn,
                     'sku_id' => $sku_info[0]['id'],
                     'sku_name' => $sku_info[0]['title'],
-                    'start_time' => strtotime(date('Y-m-d 0:0:0', time() + 60 * 60 * 24)),//次日生效
-                    'expired_time' => strtotime(date('Y-m-d 23:59:59', time() + $sku_info[0]['cycle'] * 60 * 60 * 24)),
+                    'start_time' => strtotime(date('Y-m-d 0:0:0', time())) + 86400,//次日生效
+                    'expired_time' => strtotime(date('Y-m-d 23:59:59', time())) + $sku_info[0]['cycle'] * 86400,
                     'power' => $sku_info[0]['power'],
                     'computing_power' => $sku->buy_nums,
                     'cycle' => $sku_info[0]['cycle'],
                     'machine_type' => 'BTC',
+                    'worth' => 0,//价值
                     'created_at' => $time,
                     'updated_at' => $time,
                 ];

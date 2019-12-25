@@ -45,6 +45,7 @@ class RouteRegistrar
             $router->get('/get.user.machine.list', ['uses' => 'UsersMachineController@getMachineList']);
             $router->get('/get.user.machine.info', ['uses' => 'UsersMachineController@getUserInfo']);
             $router->get('/get.user.machine.output', ['uses' => 'UsersMachineController@getMachineOutput']);
+            $router->post('/post.add.machine', ['uses' => 'UsersMachineController@addMachine']);
         });
         $this->router->group(['middleware' => 'token:admin'], function ($router) {
             $router->get('/get.machine.list', ['uses' => 'UsersMachineController@machineList']);

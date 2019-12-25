@@ -2,6 +2,7 @@
 
 namespace Fenguoz\Distribution\Services;
 
+use App\Services\Order\Client\GoodsService;
 use App\Services\Service;
 use Fenguoz\Distribution\Exceptions\CommonException;
 use Fenguoz\Distribution\Exceptions\MachineException;
@@ -39,7 +40,7 @@ class UsersMachineService extends Service
 
     public function getUserInfo(int $user_id)
     {
-        if ((int) $user_id <= 0)
+        if ($user_id <= 0)
             throw new CommonException(CommonException::USER_ID_ERROR);
 
         $user = UsersModel::where([
@@ -85,5 +86,35 @@ class UsersMachineService extends Service
         if (!$data)
             throw new UsersMachineException(UsersMachineException::NOT_LOTTERY);
         return  $data;
+    }
+
+    public function addMachine(int $user_id, int $sku_id, int $number, int $type = 1, int $specify_cycle = null)
+    {
+        if ($user_id <= 0)
+            throw new CommonException(CommonException::USER_ID_ERROR);
+
+        $sku_info = (new GoodsService)->good($sku_id);
+        if (empty($sku_info))
+            throw new CommonException(CommonException::GOODS_NOT_EXIST);
+        $cycle = $specify_cycle ? $specify_cycle : $sku_info[0]['cycle'];
+        $machine_data = [
+            'user_id' => $user_id,
+            'sku_id' => $sku_info[0]['id'],
+            'sku_name' => $sku_info[0]['title'],
+            'start_time' => strtotime(date('Y-m-d 0:0:0', time())) + 86400, //次日生效
+            'expired_time' => strtotime(date('Y-m-d 23:59:59', time())) + $cycle * 3600,
+            'power' => $sku_info[0]['power'],
+            'computing_power' => $number,
+            'cycle' => $cycle,
+            'machine_type' => 'BTC',
+            'type' => $type,
+            'created_at' => time(),
+            'updated_at' => time(),
+        ];
+
+        $result = UsersMachineModel::insert($machine_data);
+        if (!$result) throw new CommonException(CommonException::USER_ID_ERROR);
+
+        return true;
     }
 }

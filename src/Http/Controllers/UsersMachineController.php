@@ -79,4 +79,16 @@ class UsersMachineController extends Controller
         $data = $usersMachineService->getLotteryResult($mac);
         return self::success($data);
     }
+
+    public function addMachine(Request $request, UsersMachineService $usersMachineService)
+    {
+        $user_id = $request->get('user_id');
+        $sku_id = $request->input('sku_id') ?? '';
+        $number = $request->input('number') ?? '';
+        $type = $request->input('type') ?? 1;
+        $specify_cycle = $request->input('specify_cycle') ?? '';
+
+        $data = $usersMachineService->addMachine((int) $user_id, (int) $sku_id, (int) $number, (int) $type, $specify_cycle);
+        return self::success($data);
+    }
 }

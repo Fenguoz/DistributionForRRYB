@@ -16,16 +16,6 @@ class ServiceProvider extends BaseProvider
     {
         //Include routes
         self::routes();
-
-        if ($this->app->runningInConsole()) {
-            // $this->registerMigrations();
-
-            $this->commands([
-                Commands\MachineCreate::class,
-                Commands\MachineOutput::class,
-                Commands\MachineQuotes::class,
-            ]);
-        }
     }
 
     /**

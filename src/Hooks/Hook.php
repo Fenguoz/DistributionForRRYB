@@ -7,14 +7,6 @@ use App\Models\User\UserModel;
 
 class PluginMachineleaseHook
 {
-	public function paySuccess(&$order_info)
-	{
-		return OrderQueueModel::insert([
-			'order_sn' => $order_info['order_sub']['order_sn'],
-			'order_sub_sn' => $order_info['order_sub']['sub_sn']
-		]);
-	}
-
 	public function create_user_after(&$data)
 	{
 		//抽奖奖励

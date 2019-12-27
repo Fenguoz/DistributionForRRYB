@@ -43,6 +43,8 @@ class RouteRegistrar
     {
         $this->router->group(['middleware' => 'token:user'], function ($router) {
             $router->post('/post.add.machine', ['uses' => 'UsersMachineController@addMachine']);
+            $router->post('/post.extend.machine', ['uses' => 'UsersMachineController@extendMachine']);
+            $router->get('/get.user.team', ['uses' => 'UsersMachineController@team']);
         });
         $this->router->group(['middleware' => 'token:client'], function ($router) {
             $router->get('/get.lottery.result', ['uses' => 'UsersMachineController@getLotteryResult']);

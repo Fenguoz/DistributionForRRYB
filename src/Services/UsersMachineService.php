@@ -8,6 +8,9 @@ use Fenguoz\Distribution\Exceptions\CommonException;
 use Fenguoz\Distribution\Exceptions\UsersMachineException;
 use Fenguoz\Distribution\Models\LotteryResultModel;
 use Fenguoz\Distribution\Models\UsersMachineModel;
+use Fenguoz\Distribution\Models\UsersModel;
+use Fenguoz\MachineLease\Models\LevelModel;
+use Illuminate\Support\Facades\DB;
 
 class UsersMachineService extends Service
 {
@@ -48,6 +51,32 @@ class UsersMachineService extends Service
         return  $data;
     }
 
+    public function extendMachine(int $user_id, int $type = 1, int $extend_cycle = null)
+    {
+        if ($user_id <= 0)
+            throw new CommonException(CommonException::USER_ID_ERROR);
+
+        $info = UsersMachineModel::where([
+            'user_id' => $user_id,
+            'type' => $type
+        ])->first();
+        if(!$info){
+            $this->addMachine($user_id, 3, 1, $type, $extend_cycle);
+        }else{
+            if($info->status == 1){
+                $info->expired_time += $extend_cycle*3600;
+                $info->cycle += $extend_cycle;
+            }else{
+                $info->status = 1;
+                $info->start_time = strtotime(date('Y-m-d 0:0:0', time())) + 86400;
+                $info->expired_time += strtotime(date('Y-m-d 23:59:59', time())) + $extend_cycle*3600;
+                $info->cycle += $extend_cycle;
+            }
+            $info->save();
+        }
+        return true;
+    }
+
     public function addMachine(int $user_id, int $sku_id, int $number, int $type = 1, int $specify_cycle = null)
     {
         if ($user_id <= 0)
@@ -76,5 +105,32 @@ class UsersMachineService extends Service
         if (!$result) throw new CommonException(CommonException::USER_ID_ERROR);
 
         return true;
+    }
+
+    public function team(int $user_id, int $count = 10)
+    {
+        $usertolevel = DB::table('rryb_users.user_relation')->where('invite_user_id', $user_id)->pluck('level','user_id')->all() ?? [];
+
+        $leveltoname = LevelModel::pluck('name','level')->all();
+        $leveltoname[0] = '注册会员';
+        $user_ids = array_keys($usertolevel);
+        $users = UsersModel::whereIn('user_id',$user_ids)->paginate($count);
+        $user_data = [];
+        foreach($users as $user){
+
+            $mobile = DB::table('rryb_users.user')->where('id',$user->user_id)->value('mobile')??'';
+            $child_ids = DB::table('rryb_users.user_relation')->where('root', 'like', "%,{$user->user_id},%")->pluck('user_id') ?? [];
+            $team_power = UsersModel::whereIn('user_id', $child_ids)->sum('power') ?? '0.00000000';
+
+            $user_data[] = [
+                'mobile' => $mobile,
+                'avatar' => '',
+                'level_name' => $leveltoname[$usertolevel[$user->user_id]],
+                'power' => $user->power,
+                'team_power' => $team_power
+            ];
+        }
+
+        return $user_data;
     }
 }

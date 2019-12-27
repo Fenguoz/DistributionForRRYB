@@ -38,4 +38,22 @@ class UsersMachineController extends Controller
         $data = $usersMachineService->addMachine((int) $user_id, (int) $sku_id, (int) $number, (int) $type, $specify_cycle);
         return self::success($data);
     }
+
+    public function extendMachine(Request $request, UsersMachineService $usersMachineService)
+    {
+        $user_id = $request->input('user_id');
+        $type = 10;
+        $extend_cycle = $request->input('extend_cycle') ?? '';
+
+        $data = $usersMachineService->extendMachine((int) $user_id, (int) $type, $extend_cycle);
+        return self::success($data);
+    }
+
+    public function team(Request $request, UsersMachineService $usersMachineService)
+    {
+        $user_id = $request->get('user_id');
+        $count = $request->input('count') ? (int) $request->input('count') : 10;
+        $data = $usersMachineService->team((int)$user_id, $count);
+        return self::success($data);
+    }
 }

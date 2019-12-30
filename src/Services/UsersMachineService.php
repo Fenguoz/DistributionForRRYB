@@ -60,16 +60,16 @@ class UsersMachineService extends Service
             'user_id' => $user_id,
             'type' => $type
         ])->first();
-        if(!$info){
-            $this->addMachine($user_id, 3, 1, $type, $extend_cycle);
-        }else{
-            if($info->status == 1){
-                $info->expired_time += $extend_cycle*3600;
+        if (!$info) {
+            $this->addMachine($user_id, 4, 2, $type, $extend_cycle);
+        } else {
+            if ($info->status == 1) {
+                $info->expired_time += $extend_cycle * 3600;
                 $info->cycle += $extend_cycle;
-            }else{
+            } else {
                 $info->status = 1;
                 $info->start_time = strtotime(date('Y-m-d 0:0:0', time())) + 86400;
-                $info->expired_time += strtotime(date('Y-m-d 23:59:59', time())) + $extend_cycle*3600;
+                $info->expired_time += strtotime(date('Y-m-d 23:59:59', time())) + $extend_cycle * 3600;
                 $info->cycle += $extend_cycle;
             }
             $info->save();
@@ -86,6 +86,7 @@ class UsersMachineService extends Service
         if (empty($sku_info))
             throw new CommonException(CommonException::GOODS_NOT_EXIST);
         $cycle = $specify_cycle ? $specify_cycle : $sku_info[0]['cycle'];
+
         $machine_data = [
             'user_id' => $user_id,
             'sku_id' => $sku_info[0]['id'],
@@ -101,32 +102,57 @@ class UsersMachineService extends Service
             'updated_at' => time(),
         ];
 
-        $result = UsersMachineModel::insert($machine_data);
-        if (!$result) throw new CommonException(CommonException::USER_ID_ERROR);
+        try {
+            $result = UsersMachineModel::insert($machine_data);
+            if (!$result) throw new CommonException(CommonException::USER_ID_ERROR);
 
+            $user = UsersModel::where('user_id', $user_id)->first();
+            if(!$user){
+                $result = UsersModel::insert(['user_id' => $user_id]);
+                if (!$result) throw new CommonException(CommonException::USER_ID_ERROR);
+            }
+            switch ($type) {
+                case 1:
+                case 2:
+                    $result = UsersModel::where('user_id', $user_id)->increment('power', $number);
+                    if (!$result) throw new CommonException(CommonException::UPDATE_POWER_ERROR);
+                    break;
+                case 3:
+                    $result = UsersModel::where('user_id', $user_id)->increment('reward_power', $number);
+                    if (!$result) throw new CommonException(CommonException::UPDATE_POWER_ERROR);
+                    break;
+                case 10:
+                    $result = UsersModel::where('user_id', $user_id)->increment('reward_team_power', $number);
+                    if (!$result) throw new CommonException(CommonException::UPDATE_POWER_ERROR);
+                    break;
+            }
+        } catch (CommonException $e) {
+            throw new CommonException($e->getCode());
+        }
         return true;
     }
 
     public function team(int $user_id, int $count = 10)
     {
-        $usertolevel = DB::table('rryb_users.user_relation')->where('invite_user_id', $user_id)->pluck('level','user_id')->all() ?? [];
+        $usertolevel = DB::table('rryb_users.user_relation')->where('invite_user_id', $user_id)->pluck('level', 'user_id')->all() ?? [];
 
-        $leveltoname = LevelModel::pluck('name','level')->all();
+        $leveltoname = LevelModel::pluck('name', 'level')->all();
         $leveltoname[0] = '注册会员';
         $user_ids = array_keys($usertolevel);
-        $users = UsersModel::whereIn('user_id',$user_ids)->paginate($count);
+        $users = DB::table('rryb_users.user_relation')->whereIn('user_id', $user_ids)->paginate($count);
         $user_data = [];
-        foreach($users as $user){
+        foreach ($users as $user) {
 
-            $mobile = DB::table('rryb_users.user')->where('id',$user->user_id)->value('mobile')??'';
+            $mobile = DB::table('rryb_users.user')->where('id', $user->user_id)->value('mobile') ?? '';
             $child_ids = DB::table('rryb_users.user_relation')->where('root', 'like', "%,{$user->user_id},%")->pluck('user_id') ?? [];
             $team_power = UsersModel::whereIn('user_id', $child_ids)->sum('power') ?? '0.00000000';
+            $power = UsersModel::where('user_id', $user->user_id)->value('power') ?? '0.00000000';
 
             $user_data[] = [
                 'mobile' => $mobile,
                 'avatar' => '',
                 'level_name' => $leveltoname[$usertolevel[$user->user_id]],
-                'power' => $user->power,
+                'power' => $power,
                 'team_power' => $team_power
             ];
         }

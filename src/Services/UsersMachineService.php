@@ -69,7 +69,7 @@ class UsersMachineService extends Service
             } else {
                 $info->status = 1;
                 $info->start_time = strtotime(date('Y-m-d 0:0:0', time())) + 86400;
-                $info->expired_time += strtotime(date('Y-m-d 23:59:59', time())) + $extend_cycle * 3600;
+                $info->expired_time = strtotime(date('Y-m-d 23:59:59', time())) + $extend_cycle * 3600;
                 $info->cycle += $extend_cycle;
             }
             $info->save();
